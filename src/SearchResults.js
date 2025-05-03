@@ -9,8 +9,33 @@ function SearchResults(props){
     //will also change when a user moves track objects to the custom playlist column
     const [currentResults, setCurrentResults] = useState(props.list);
 
+
+    const sliceTrack = (event) => {
+        let trackIndex = event.target.value;
+        let selectedTrack = [];
+        console.log(`This is the value that will be searched for from setTrack ${trackIndex}`);
+        const results = currentResults.findIndex((track) => track.id == trackIndex);
+        console.log(`This is the value obtained by using findIndex: ${results}`);
+        console.log(currentResults[results]["album"]);
+        //we need the following to add to the custom user-made playlist
+        props.getTrack(currentResults[results]);
+        selectedTrack.push(currentResults[results]);
+        //we're just verifying that we got the right track object
+        console.log(`This is the track that was extracted from the searchResults ${selectedTrack[0]["name"]}`);
+        console.log(`${selectedTrack[0]["id"]}`);
+        //let getID = pickedTrack.id;
+        //now we need to make sure that currentResults now only displays the rest of the tracks array, minus the one that was clicked by user
+        setCurrentResults(() => {
+            return currentResults.filter((track) => {
+                return track.id !== selectedTrack[0]["id"] ;
+            })
+        });
+
+    };
+
      //a function to hold a given array in mapped form. A key for each individual element is included
      const mappedList = currentResults.map((track) =>{
+        
         return <li key={track.id}>
             <div>
                 <p>{track.name}</p>
@@ -20,7 +45,9 @@ function SearchResults(props){
                 <Button text="=>" value={track.id} onClick={sliceTrack} />
             </div>
         </li>;
+       
     });
+    
 
 
     //used to hold the page number which will affect which part of the list array gets rendered to the user
@@ -40,14 +67,11 @@ function SearchResults(props){
         console.log(`This is the current page number ${pageNumber}`);
     };
 
-    //a function that will slice a track off the currentResults array using the given track ID
-    const sliceTrack = (event) => {
-        const slicedTrackIndex = mappedList.indexOf(event.target.value);
-        console.log(`This is the index of the button you pressed ${slicedTrackIndex}`);
-    };
-
    
 
+   
+    //This function will only display the tracks that are pertinent to the page number selected
+    //The number of tracks are divided by 10 which yields the number of pages. 
     const handleDisplay = (pageNumber) => {
         let displayArray = [];
 

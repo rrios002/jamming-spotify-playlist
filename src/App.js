@@ -12,7 +12,20 @@ const App = () =>{
    const clickHandler = (event) =>{
         setGetUserTrack(event.target.value);
         console.log(`target obtained ${getUserTrack}`);
-   }
+   };
+   //this array will hold the tracks the user selects into a custom playlist
+   const [userPlaylist, setUserPlaylist] = useState([]);
+   //a function that will add to the custom playlist array, to then be passed to the Playlist component
+   const userAddTrack = (track) =>{
+        console.log(`This is the track being added at the App level: ${track.name}`);
+        const testArray = [10,100,1000,10000,100000];
+        console.log(testArray);
+        setUserPlaylist((prev) => {
+            console.log("Adding track...");
+            console.log(...prev);
+            return [...prev, track];
+        });
+   };
 
     
     
@@ -21,8 +34,8 @@ const App = () =>{
         <SearchBar onClick={clickHandler} />
         <h1>Here is the song name in App.js: {getUserTrack}</h1>
         <div>
-            <SearchResults list={exampleData}/>
-            <Playlist />
+            <SearchResults list={exampleData} getTrack={userAddTrack} />
+            <Playlist userList={userPlaylist} />
         </div>
         </div>
     );
