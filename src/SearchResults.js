@@ -1,5 +1,5 @@
 //Search Results
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from './Button';
 
 //a function that will display search results as a list. The ID: 0 is at the top, going downward.
@@ -9,31 +9,39 @@ function SearchResults(props){
     //will also change when a user moves track objects to the custom playlist column
     const [currentResults, setCurrentResults] = useState(props.list);
 
-
+    //this only executes if there is a change in props.cancelSelect
+    /*useEffect(() =>{
+        setCurrentResults(() => {
+            return currentResults.sort((a,b) => a.id - b.id);
+        });
+    }, [props.cancelSelect]);
+    */
     const sliceTrack = (event) => {
         let trackIndex = event.target.value;
-        let selectedTrack = [];
+        //let selectedTrack = [];
         console.log(`This is the value that will be searched for from setTrack ${trackIndex}`);
         const results = currentResults.findIndex((track) => track.id == trackIndex);
         console.log(`This is the value obtained by using findIndex: ${results}`);
-        console.log(currentResults[results]["album"]);
+        console.log(currentResults[results]);
         //we need the following to add to the custom user-made playlist
         props.getTrack(currentResults[results]);
-        selectedTrack.push(currentResults[results]);
+        console.log(`Here is the track that corresponds to the index received: ${currentResults[results].name}`);
+        //selectedTrack.push(currentResults[results]);
         //we're just verifying that we got the right track object
-        console.log(`This is the track that was extracted from the searchResults ${selectedTrack[0]["name"]}`);
-        console.log(`${selectedTrack[0]["id"]}`);
+        //console.log(`This is the track that was extracted from the searchResults ${selectedTrack[0]["name"]}`);
+        //console.log(`${selectedTrack[0]["id"]}`);
         //let getID = pickedTrack.id;
         //now we need to make sure that currentResults now only displays the rest of the tracks array, minus the one that was clicked by user
-        setCurrentResults(() => {
+        /*setCurrentResults(() => {
             return currentResults.filter((track) => {
                 return track.id !== selectedTrack[0]["id"] ;
             })
         });
+        */
 
     };
 
-     //a function to hold a given array in mapped form. A key for each individual element is included
+     //a function that maps the search results to jsx.
      const mappedList = currentResults.map((track) =>{
         
         return <li key={track.id}>

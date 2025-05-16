@@ -17,26 +17,60 @@ const App = () =>{
    const [userPlaylist, setUserPlaylist] = useState([]);
    //a function that will add to the custom playlist array, to then be passed to the Playlist component
    const userAddTrack = (track) =>{
-        console.log(`This is the track being added at the App level: ${track.name}`);
+        console.log(track);
+        console.log(`This is the track being added at the App level: ${track}`);
+        console.log(`This is the track's ID: ${track.id}`);
+        console.log(`Here is the userPlaylist's length so far: ${userPlaylist.length}`);
+        console.log(typeof userPlaylist);
+        //this if statement might break the code:
+        /*
+        if (userPlaylist.includes(track)){
+            const selectedTrack = [];
+            selectedTrack.push = track;
+            setUserPlaylist((track) =>{
+                userPlaylist.filter((track) =>{
+                    return track["id"] !== userPlaylist["id"];
+                })
+            });
+        };
+        */
+        if (userPlaylist.length > 0){
+            if (userPlaylist.includes(track)) {
+            console.log(`This track is already on the playlist!`);
+            return;
+            };
+        };
+        
         const testArray = [10,100,1000,10000,100000];
         console.log(testArray);
-        setUserPlaylist((prev) => {
-            console.log("Adding track...");
-            console.log(...prev);
-            return [...prev, track];
-        });
+        setUserPlaylist(
+            [...userPlaylist, track]
+        );
+        
    };
+
+   //a function that will call setUserPlaylist to exclude entries in the custom playlist
+   const cancelTrack = (track) =>{
+        console.log(`Here is the track received by the cancelTrack function:`)
+        console.log(track);
+        //calling setUserPlaylist to filter out
+        setUserPlaylist((track) => {
+            userPlaylist.filter((track) => {
+                return userPlaylist.id !== track;
+            })
+        });
+   }
 
     
     
     return (
         <div>
-        <SearchBar onClick={clickHandler} />
-        <h1>Here is the song name in App.js: {getUserTrack}</h1>
-        <div>
-            <SearchResults list={exampleData} getTrack={userAddTrack} />
-            <Playlist userList={userPlaylist} />
-        </div>
+            <SearchBar onClick={clickHandler} />
+            <h1>Here is the song name in App.js: {getUserTrack}</h1>
+            <div>
+                <SearchResults list={exampleData} getTrack={userAddTrack} />
+                <Playlist userList={userPlaylist} cancelTrack={cancelTrack} />
+            </div>
         </div>
     );
 };
