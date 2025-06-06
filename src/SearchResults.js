@@ -1,5 +1,5 @@
 //Search Results
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Button from './Button';
 
 //a function that will display search results as a list. The ID: 0 is at the top, going downward.
@@ -9,13 +9,7 @@ function SearchResults(props){
     //will also change when a user moves track objects to the custom playlist column
     const [currentResults, setCurrentResults] = useState(props.list);
 
-    //this only executes if there is a change in props.cancelSelect
-    /*useEffect(() =>{
-        setCurrentResults(() => {
-            return currentResults.sort((a,b) => a.id - b.id);
-        });
-    }, [props.cancelSelect]);
-    */
+   
     const sliceTrack = (event) => {
         let trackIndex = event.target.value;
         //let selectedTrack = [];
@@ -24,7 +18,7 @@ function SearchResults(props){
         console.log(`This is the value obtained by using findIndex: ${results}`);
         console.log(currentResults[results]);
         //we need the following to add to the custom user-made playlist
-        props.getTrack(currentResults[results]);
+        props.getTrack(results);
         console.log(`Here is the track that corresponds to the index received: ${currentResults[results].name}`);
         //selectedTrack.push(currentResults[results]);
         //we're just verifying that we got the right track object

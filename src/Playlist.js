@@ -2,53 +2,24 @@
 //Includes a 'Save to Spotify' Button
 import React, { useEffect, useState } from 'react';
 import Button from './Button';
+import Track from "./Track";
 
 function Playlist(props){
-    //this will hold the current list as displayed to the user:
-    const [userMadeList, setUserMadeList] = useState(props.userList);
-    //useEffect will synchronize changes in the userPlaylist state variable located in App.js
-    useEffect(() =>{
-        setUserMadeList(props.userList);
-    }, [props.userList]);
+  
+    const [playlistName, setPlaylistName]= useState("")
 
-    //a clickhandler function that will remove the selected track from the custom playlist
-    const clickHandler = (event) => {
-       
-        const trackIndex = event.target.value;
-        const selectedTrack = [];
-        const results = userMadeList.findIndex((track) => (track.id == trackIndex));
-        console.log(`here is the index deom cusome lplaylit arrea`)
-        selectedTrack.push(userMadeList[results]);
-        //props.cancelTrack(trackIndex);
-        
-        setUserMadeList(() =>{
-            return userMadeList.filter((track) =>{
-                return track["id"] !== selectedTrack[0]["id"];
-            });
-        })
-         
-    };
-
-    //mapping the custom playlist to jsx tags that will be displayed back to App
-    const mappedUserList = userMadeList.map((track) => {
-
-        console.log(`Here is the track at the Playlist component: ${track.name}`);
-        return <li key={track.id}>
-        <div>
-            <p>{track.name}</p>
-            <p>{track.artist}</p>
-            <p>{track.album}</p>
-            <p>{track.id}</p>
-            <Button text="X" value={track.id} onClick={clickHandler} />
-        </div>;
-    </li>
-    });
-
-    
+    const getPlaylistName = (event) =>{
+        setPlaylistName(event.target.value);
+    }
     return (
         <>
+        <form class="Playlist_Form_1">
+            <input type="text" name="Playlist_text_field_1" value={playlistName} onChange={getPlaylistName}></input>
+        </form>
+        <h3>Here is the current name of the playlist: {playlistName}</h3>
         <h2>Here are the tracks the user has selected:</h2>
-        <ul>{mappedUserList}</ul>
+        <ul><Track playlist={props.playlist} onClick={props.onClick}/></ul>
+        <Button text="Save Playlist" onClick={props.onSubmit} value={playlistName} />
         </>
     )
 };

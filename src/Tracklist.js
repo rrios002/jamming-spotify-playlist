@@ -1,7 +1,7 @@
 //Tracklist
 import React from 'react';
 
-function Tracklist(){
+function Tracklist(props){
 
 };
 
