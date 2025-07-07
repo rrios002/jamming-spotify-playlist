@@ -13,7 +13,7 @@ function Playlist(props){
     }
     return (
         <>
-        <form class="Playlist_Form_1">
+        <form className="Playlist_Form_1">
             <input type="text" name="Playlist_text_field_1" value={playlistName} onChange={getPlaylistName}></input>
         </form>
         <h3>Here is the current name of the playlist: {playlistName}</h3>

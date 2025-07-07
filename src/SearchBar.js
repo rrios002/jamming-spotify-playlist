@@ -13,6 +13,40 @@ function SearchBar(props) {
     };
 
     //will execute when the user clicks the 'search' button
+    async function spotifySearch(){
+        const accessToken = props.accessToken;
+        const searchEndpoimt = "https://api.spotify.com/v1/search";
+        const params = new URLSearchParams({
+            q:track,
+            type:'track',
+            limit: 50
+        });
+        const paramsString = params.toString();
+        const fetchInfo = {
+            method: "GET",
+            headers:{
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        };
+
+        const response = await fetch(`${searchEndpoimt}?${paramsString}`, fetchInfo);
+
+        //throws an error is response.ok = 'false'
+        if(!response.ok){
+            throw new Error(`Error: ${response.status} - ${response.statusText}`);
+        };
+
+        const data = await response.json();
+        console.log(data);
+        //returning the search results back to App:
+        props.onClick(data);
+        return;
+
+
+
+        
+    };
     
 
     return (
@@ -22,7 +56,11 @@ function SearchBar(props) {
                 <label htmlFor='textInput'></label>
                 <input id='textInput' type='text' onChange={handleChange} value={track}></input>
             </form>
-            <Button text='Search' value={track} onClick={props.onClick}/>
+            <div>
+                <Button text='Search' value={track} onClick={props.onClick}/>
+                <Button text='Spotify Search' onClick={spotifySearch} />
+            </div>
+            
             <h1>Here is the song name: {track}</h1>
         </>
         

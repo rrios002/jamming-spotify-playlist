@@ -1,19 +1,22 @@
-//Gaining access to the Spotify API using Authentication Flow with PKCE.
+import React from "react";
+
+async function Authorization (props){
+  //Gaining access to the Spotify API using Authentication Flow with PKCE.
 
 /*The client ID for your Spotify Application*/
 const clientID = 'yourClientIDGoesHere'; // Your clientID from the Spotify Dev App page. 
-const redirectURL = 'http://127.0.0.1:8080';        // your redirect URL - must be localhost URL and/or HTTPS
+const redirectURL = 'http://[::1]:4000/';        // your redirect URL - must be local URL and/or HTTPS
 
 /*The URLs that access and receive authorization to get resources*/
 const authorizationEndpoint = "https://accounts.spotify.com/authorize"; //Get an authorization grant
 const tokenEndpoint = "https://accounts.spotify.com/api/token"; //Get an access token
 
 /*Scopes can be changed by reading the Scopes Documentation*/
-const scope = 'user-read-private user-read-email';
+const scope = 'user-read-private user-read-email playlist-read-private playlist-modify-private playlist-modify-public';
 
 // Data structure that manages the current active token, caching it in localStorage
 /*currentToken is an object that manages the current active token.
-It will be the structure that holds the credentials we need to access Spotify resources.
+It holds the credentials we need to access Spotify resources.
 It uses get and set methods to access each variable respectively*/
 const currentToken = {
     get access_token() { 
@@ -28,7 +31,8 @@ const currentToken = {
     get expires() { 
         return localStorage.getItem('expires') || null 
     },
-  
+    
+    //the "save" key accesses a function that saves a json response to localStorage and keeps track of the time that it remains valid
     save: function (response) {
       const { access_token, refresh_token, expires_in } = response;
       localStorage.setItem('access_token', access_token);
@@ -51,7 +55,7 @@ const code = args.get('code');
 // If we find a code, we're in a callback, do a token exchange
 if (code) {
     const token = await getToken(code); //waits for getToken to return a code
-    currentToken.save(token); //saves the 'token' variable to the currentToken object
+    currentToken.save(token); //saves the 'token' object to the currentToken object
   
     // Remove code from URL so we can refresh correctly.
     const url = new URL(window.location.href); //window.location.href returns the current URL, it saves to 'url'
@@ -77,7 +81,7 @@ if (currentToken.access_token) {
 
   };
 
-/*THe following code comes directly from the Spotify webpage 'Authorization flow with PKCE'*/
+/*The following code comes directly from the Spotify webpage 'Authorization flow with PKCE'*/
 async function redirectToSpotifyAuthorize() {
 
     //Code Verifier
@@ -116,7 +120,7 @@ async function redirectToSpotifyAuthorize() {
     window.location.href = authUrl.toString(); // Redirect the user to the authorization server for login; the new address being the endpoint URL + params query string
   }
 
-// Soptify API Calls
+// Spotify API Calls
 async function getToken(code) {
     const code_verifier = localStorage.getItem('code_verifier');
   
@@ -182,3 +186,7 @@ async function refreshTokenClick() {
     currentToken.save(token);
     renderTemplate("oauth", "oauth-template", currentToken);
   }
+};
+
+export default Authorization;
+
