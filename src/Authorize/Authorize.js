@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect } from "react";
-import Button from "./Button";
+import Button from "../Button/Button.js";
+import * as styles from "./Authorize.module.css";
+
 
 
 function Authorize (props) {
@@ -35,7 +37,7 @@ function Authorize (props) {
         },
 
         //the following key-value pair is a function, and will store 
-        //access tokens and the time values that track of a token's validity
+        //access tokens and the time values that keep track of a token's validity
         save: function (response) {
             console.log(`Here is the response at the save function`);
             console.log(response);
@@ -53,7 +55,9 @@ function Authorize (props) {
             const expires = new Date(now.getTime() + (expires_in * 1000));
             //set the new expiration time in memory
             localStorage.setItem("expires", expires);
-
+            setTimeout(() =>{
+                refreshHandler();
+            },3000*1000);
 
 
         }
@@ -209,20 +213,7 @@ function Authorize (props) {
         const request = await fetch(tokenEndpointURL, refreshInfo);
         const response = await request.json();
         return response;
-        /*
-        localStorage.setItem("access_token", response.access_token);
-        if(response.access_token){
-            localStorage.setItem("refresh_token", response.refresh_token);
-        };
-
-        //each token has valid credentials for one hour (3600 seconds). Using the current time (in ms)
-        //and the expiresIn time, we can calculate when the token will expire and store that time value for later
-        const now = new Date();//creates a new Date object; the time is expressed in milliseconds (ms)
-        //takes the current time and adds 3600000 milliseconds to get the future expiration time of the token
-        const expires = new Date(now.getTime() + (expires_in * 1000));
-        //set the new expiration time in memory
-        localStorage.setItem("expires", expires);
-        */
+ 
 
     };
 
@@ -232,7 +223,7 @@ function Authorize (props) {
     };
 
     //clickHandler function for refreshToken
-    async function refreshClickHandler(){
+    async function refreshHandler(){
         const data = await refreshToken();
         currentToken.save(data);
         props.getRefresh();
@@ -246,8 +237,11 @@ function Authorize (props) {
     
     return (
         <>
-        <Button text="Log In to Spotify" onClick={loginWithSpotifyClick} />
-        <Button onClick={refreshClickHandler} text="Refresh Session" />
+        <div className={styles.buttonContainer}>
+            <Button text="Log In" onClick={loginWithSpotifyClick} />
+            <Button text="Log Out" onClick={logoutClick} />
+        </div>
+        
         </>
     );
 

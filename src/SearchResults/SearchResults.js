@@ -1,6 +1,7 @@
 //Search Results
 import React, { useState, useEffect } from 'react';
-import Button from './Button';
+import Button from '../Button/Button.js';
+import * as styles from "./SearchResults.module.css";
 
 //a function that will display search results as a list. The ID: 0 is at the top, going downward.
 function SearchResults(props){
@@ -46,12 +47,16 @@ function SearchResults(props){
         const mappedList = currentResults.map((track) =>{
         
         return <li key={track.id}>
-            <div>
-                <p>{track.name}</p>
-                <p>{track.artist}</p>
-                <p>{track.album}</p>
-                <p>{track.id}</p>
-                <Button text="=>" value={track.id} onClick={sliceTrack} />
+            <div className={styles.trackContainer}>
+                <div className={styles.imageContainer}>
+                    <img src={track.img} className={styles.image}  />
+                </div>
+                <div className={styles.trackInfo}>
+                    <p>{track.name}</p>
+                    <p>{track.artist}</p>
+                    <p>{track.album}</p>
+                </div>
+                <Button text="Add" value={track.id} onClick={sliceTrack} />
             </div>
         </li>;
        
@@ -94,12 +99,16 @@ function SearchResults(props){
     
     return (
         <>
-        <ul>{handleDisplay(pageNumber)}</ul>
-        <div>
-            <Button text='Previous 10' onClick={prevPage}/>
-            <Button text='Next 10' onClick={nextPage} />
+        <div className={styles.searchResults}>
+            <h3 className={styles.h3}>Displaying Results For: {props.userTrack}</h3>
+            <ul className={styles.ul}>{handleDisplay(pageNumber)}</ul>
+            <div className={styles.pageButtons}>
+                <Button text='Previous 10' onClick={prevPage}/>
+                <Button text='Next 10' onClick={nextPage} />
+            </div>
+            <h3 className={styles.h3}>Page {pageNumber}</h3>
         </div>
-        <h3>This is the current page number: {pageNumber}</h3>
+        
         </>
     );
 

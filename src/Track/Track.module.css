@@ -1,0 +1,42 @@
+.trackContainer{
+    display: inline-flex;
+    width: 30rem;
+    border: 5px solid #23B7FC;
+    background-color: purple;
+    justify-content: space-between;
+    text-align: center;
+    position: relative;
+    right: 7em;
+
+}
+
+.imageContainer{
+    height: 10rem;
+    width: 10rem;
+    display: flex;
+}
+
+.image{
+    height: 9rem;
+    width: 9rem;
+}
+
+.trackInfo{
+    font-weight: 600;
+}
+
+@media only screen and (max-width: 1230px){
+    .trackContainer{
+        width: 20rem;
+    }
+
+    .imageContainer{
+        height: 7rem;
+        width: 7rem;
+    }
+
+    .image{
+        height: 6rem;
+        width: 6rem;
+    }
+}

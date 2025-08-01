@@ -1,0 +1,16 @@
+.buttonAll{
+    background-color: rgb(30, 215, 96);
+    color: rgb(18, 18, 18);
+    font-weight: 600;
+    height: 2.5rem;
+    width: 7rem;
+    border: 2px black solid;
+    border-radius: 7px;
+    margin: 2px;
+}
+
+@media only screen and (max-width: 470px){
+    .buttonAll{
+        width: 5rem;
+    }
+}

@@ -1,0 +1,39 @@
+.searchBarContainer{
+    display: flex;
+    height: 11rem;
+    justify-content: center;
+
+}
+
+.contentContainer{
+    position: relative;
+
+}
+
+.button{
+    position: relative;
+    left: 1.4rem;
+    top: 1rem;
+
+}
+
+.h2{
+    position: relative;
+    right: 3rem;
+    color: white;;
+
+}
+
+.input{
+    width: 15rem;
+    height: 2.5rem;
+    opacity: 0.7;
+    position: relative;
+    right: 2.7rem;
+}
+
+@media only screen and (max-width: 470px){
+    .contentContainer{
+        left: 2.5rem;
+    }
+}

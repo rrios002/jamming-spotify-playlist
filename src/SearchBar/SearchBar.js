@@ -1,7 +1,8 @@
 //Search Bar
 //Includes a search button
 import React, { useState } from "react";
-import Button from './Button';
+import * as styles from "./SearchBar.module.css";
+import Button from '../Button/Button.js';
 
 function SearchBar(props) {
     //state setter variable that will hold a user-entered search string
@@ -14,6 +15,10 @@ function SearchBar(props) {
 
     //will execute when the user clicks the 'search' button
     async function spotifySearch(){
+
+        if(!track){
+            return;
+        }
         const accessToken = props.accessToken;
         const searchEndpoimt = "https://api.spotify.com/v1/search";
         const params = new URLSearchParams({
@@ -43,6 +48,7 @@ function SearchBar(props) {
 
         const items = data.tracks.items;
         //returning the search results back to App:
+        props.searchQuery(track);
         props.onClick(items);
         return;
 
@@ -54,17 +60,20 @@ function SearchBar(props) {
 
     return (
         <>
-            <h1>Enter a song name!</h1>
-            <form>
-                <label htmlFor='textInput'></label>
-                <input id='textInput' type='text' onChange={handleChange} value={track}></input>
-            </form>
-            <div>
-                <Button text='Search' value={track} onClick={props.onClick}/>
-                <Button text='Spotify Search' onClick={spotifySearch} />
+            <div className={styles.searchBarContainer}>
+                <div className={styles.contentContainer}>
+                    <h2 className={styles.h2}>Enter a song name!</h2>
+                    <form>
+                        <label htmlFor='textInput'></label>
+                        <input id='textInput' type='text' onChange={handleChange} value={track} placeholder="Enter a track" className={styles.input}></input>
+                    </form>
+                    <div className={styles.button}>
+                        <Button text='Spotify Search' onClick={spotifySearch} />
+                    </div>
+                </div>
+                
             </div>
             
-            <h1>Here is the song name: {track}</h1>
         </>
         
     );

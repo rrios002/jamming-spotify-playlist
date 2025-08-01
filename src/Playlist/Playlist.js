@@ -1,14 +1,15 @@
 //Playlist
 //Includes a 'Save to Spotify' Button
 import React, { useEffect, useState } from 'react';
-import Button from './Button';
-import Track from "./Track";
+import Button from '../Button/Button.js';
+import Track from "../Track/Track.js";
+import * as styles from "./Playlist.module.css";
 
 function Playlist(props){
   
     const [playlistName, setPlaylistName]= useState("")
 
-    const getPlaylistName = (event) =>{
+    const handlePlaylistName = (event) =>{
         setPlaylistName(event.target.value);
     };
 
@@ -106,13 +107,18 @@ function Playlist(props){
     };
     return (
         <>
-        <form className="Playlist_Form_1">
-            <input type="text" name="Playlist_text_field_1" value={playlistName} onChange={getPlaylistName}></input>
-        </form>
-        <h3>Here is the current name of the playlist: {playlistName}</h3>
-        <h2>Here are the tracks the user has selected:</h2>
-        <ul><Track playlist={props.playlist} onClick={props.onClick}/></ul>
-        <Button text="Save Playlist" onClick={submitHandler} value={playlistName} />
+        <div className={styles.playlist}>
+            <h2>New Playlist: {playlistName}</h2>
+            <form>
+                <input type="text" placeholder="Enter a name" value={playlistName} onChange={handlePlaylistName} className={styles.input}></input>
+            </form>
+            <ul className={styles.ul}><Track playlist={props.playlist} onClick={props.onClick} text="Remove"/></ul>
+            <div className={styles.button}>
+                <Button text="Save Playlist" onClick={submitHandler} value={playlistName} />
+            </div>
+            
+        </div>
+        
         </>
     )
 };

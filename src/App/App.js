@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from "react";
-import SearchBar from "./SearchBar";
-import SearchResults from "./SearchResults";
-import Playlist from "./Playlist";
-import Button from "./Button";
-import Authorize from "./Authorize";
+import * as styles from "./App.module.css";
+import SearchBar from "../SearchBar/SearchBar.js";
+import SearchResults from "../SearchResults/SearchResults.js";
+import Playlist from "../Playlist/Playlist.js";
+import Authorize from "../Authorize/Authorize.js";
+import logo from "../Images/Spotify_Primary_Logo_RGB_Green.png";
+
+
 
 
 const App = () =>{
-   //this variable will obtain the track from SearchBar
+    //This variable will hold the search query entered by the user
+   const[track, setTrack] = useState("");
+   const getSearchQuery = (query) => {
+    setTrack(query);
+   };
+
+   //this variable will obtain the tracks from SearchBar
    const [getSearchTracks, setGetSearchTracks] = useState([]);
    //a getUserTrack function that will be passed to SearchBar to obtain the user entered track request
    const clickHandler = (data) =>{
@@ -20,7 +29,10 @@ const App = () =>{
                 "artist": result.artists[0].name,
                 "album": result.album.name,
                 "id": result.id,
-                "uri": result.uri
+                "uri": result.uri,
+                "img": result.album.images[0].url,
+                "img-height": result.album.images.height,
+                "img-width": result.album.images.width
             };
         });
         console.log(`Here is the mappedResults array`);
@@ -80,38 +92,48 @@ const App = () =>{
    //this variable will hold the access token and other pertinent access tokens
    const [accessToken, setAccessToken] = useState("");
    //this accessToken function will obtain an access token to be used when adding a playlist to a user's Spotify account
-   setTimeout(() =>{
+   useEffect(() => {
+    const timer = setTimeout(() =>{
     const access_token = localStorage.getItem("access_token");
     setAccessToken(access_token);
     console.log(`Here is the access token stored in state at App.js:`);
     console.log(accessToken);
    },1500);
+   return () => clearTimeout(timer);
+   },[]);
+   
    const refreshClickHandler = () => {
         const access_token = localStorage.getItem("access_token");
         console.log(`Here is the access_token after clicking on the refresh button at App.js:`);
         console.log(access_token);
         setAccessToken(access_token);
    };
-
-
-    
+   
     
     return (
-        <div>
+        <>
+        
+        <div className={styles.appContainer}>
             <div>
-                <header>
+                <header className={styles.header}>
+                    <h1 className={styles.h1}>Jammming!</h1>
                     <Authorize  getRefresh={refreshClickHandler}/>
-                    <h2>Here is the access token: ${accessToken}</h2>
                 </header>
             </div>
-            <SearchBar onClick={clickHandler} accessToken={accessToken}/>
+            <img src={logo} alt="Green Spotify Logo" className={styles.image}/>
+            <SearchBar onClick={clickHandler} accessToken={accessToken} searchQuery={getSearchQuery} />
             
-            <div>
-                <SearchResults list={getSearchTracks} getTrack={userAddTrack} />
+            <div className={styles.playlistsDiv}>
+                <SearchResults list={getSearchTracks} getTrack={userAddTrack} userTrack={track} />
                 <Playlist playlist={userPlaylist} onClick={cancelTrack} accessToken={accessToken} onSubmit={getUserPlaylistName}/>
-                <h3>Here is the name at the App level: {playlistName}</h3>
             </div>
+            <footer className={styles.footer}>
+                <h3>&copy; 2025 Roman Rios</h3>
+                <h3>All Rights Reserved</h3>
+            </footer>
         </div>
+        
+        </>
     );
 };
 
